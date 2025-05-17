@@ -12,6 +12,7 @@ import Signup from "./pages/Signup";
 import ImageClassify from "./pages/ImageClassify";
 import Whiteboard from "./pages/Whiteboard";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/signup" element={<Signup />} />
             <Route path="/classify" element={<ImageClassify />} />
             <Route path="/whiteboard" element={<Whiteboard />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

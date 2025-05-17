@@ -41,14 +41,16 @@ export const Navbar = () => {
             
             {isAuthenticated ? (
               <div className="flex items-center space-x-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-white hover:text-primary-100 flex items-center"
-                >
-                  <User className="w-4 h-4 mr-1" />
-                  {user?.name}
-                </Button>
+                <Link to="/profile">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:text-primary-100 flex items-center"
+                  >
+                    <User className="w-4 h-4 mr-1" />
+                    {user?.name}
+                  </Button>
+                </Link>
                 <Button 
                   variant="ghost" 
                   size="sm" 
@@ -119,10 +121,14 @@ export const Navbar = () => {
             
             {isAuthenticated ? (
               <>
-                <div className="text-white hover:text-primary-100 block px-3 py-2 rounded-md text-base font-medium flex items-center">
+                <Link 
+                  to="/profile"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-white hover:text-primary-100 block px-3 py-2 rounded-md text-base font-medium flex items-center"
+                >
                   <User className="w-4 h-4 mr-2" />
                   {user?.name}
-                </div>
+                </Link>
                 <button
                   onClick={() => {
                     logout();

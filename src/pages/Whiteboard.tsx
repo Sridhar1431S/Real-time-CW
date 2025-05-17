@@ -35,45 +35,45 @@ const Whiteboard = () => {
     <AuthGuard>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="space-y-6">
+        <main className="flex-1 py-6 sm:py-8 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+          <div className="space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">Collaborative Whiteboard</h1>
-                <p className="mt-2 text-gray-600">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Collaborative Whiteboard</h1>
+                <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
                   Create and share drawings with your team in real-time.
                 </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Button onClick={() => setIsJoining(!isJoining)} variant="outline">
+              <div className="flex flex-col xs:flex-row sm:flex-row gap-2">
+                <Button onClick={() => setIsJoining(!isJoining)} variant="outline" responsive={true}>
                   Join Session
                 </Button>
-                <Button onClick={createNewSession}>
+                <Button onClick={createNewSession} responsive={true}>
                   New Session
                 </Button>
               </div>
             </div>
             
             {isJoining && (
-              <div className="flex gap-2 items-center animate-fadeIn">
+              <div className="flex flex-col xs:flex-row gap-2 items-start xs:items-center animate-fadeIn">
                 <Input
                   placeholder="Enter session ID"
                   value={newSessionId}
                   onChange={(e) => setNewSessionId(e.target.value)}
-                  className="max-w-xs"
+                  className="flex-grow max-w-full xs:max-w-xs"
                 />
-                <Button onClick={handleJoinSession}>
+                <Button onClick={handleJoinSession} className="w-full xs:w-auto">
                   Join
                 </Button>
               </div>
             )}
             
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <div className="mb-3 flex items-center justify-between">
+            <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+              <div className="mb-3 flex flex-col xs:flex-row xs:items-center xs:justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold">Current Session:</span>
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm">{sessionId}</code>
+                  <span className="text-xs sm:text-sm font-semibold">Current Session:</span>
+                  <code className="bg-gray-100 px-2 py-1 rounded text-xs sm:text-sm break-all">{sessionId}</code>
                 </div>
                 <Button
                   variant="ghost"
@@ -82,12 +82,13 @@ const Whiteboard = () => {
                     navigator.clipboard.writeText(sessionId);
                     toast.success('Session ID copied to clipboard');
                   }}
+                  className="self-start xs:self-center"
                 >
                   Copy ID
                 </Button>
               </div>
               
-              <div className="h-[600px]">
+              <div className="h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
                 <Canvas sessionId={sessionId} />
               </div>
             </div>

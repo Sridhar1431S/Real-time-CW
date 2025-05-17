@@ -1,110 +1,127 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { toast } from '@/components/ui/sonner';
-
-interface User {
+type User = {
   id: string;
   name: string;
   email: string;
-}
+};
 
-interface AuthContextType {
+type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-}
+  updateProfile: (name: string) => Promise<void>;
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  // Mock authentication state for demonstration
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  // Check if the user is already logged in
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Check for existing session on mount
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error('Failed to parse stored user data:', error);
-        localStorage.removeItem('user');
-      }
+      setUser(JSON.parse(storedUser));
     }
+    setIsLoading(false);
   }, []);
-
+  
+  // Login function - in a real app, this would call an API
   const login = async (email: string, password: string) => {
+    setIsLoading(true);
     try {
-      // Mock API call - in a real app, this would be an actual API call
-      if (email && password) {
-        // Simple validation for demo purposes
-        if (email === 'demo@example.com' && password === 'password') {
-          const mockUser = {
-            id: '123456',
-            name: 'Demo User',
-            email: email,
-          };
-          
-          setUser(mockUser);
-          setIsAuthenticated(true);
-          localStorage.setItem('user', JSON.stringify(mockUser));
-          toast.success('Login successful!');
-          return;
-        }
-      }
-      throw new Error('Invalid credentials');
-    } catch (error) {
-      console.error('Login failed:', error);
-      toast.error('Login failed. Please check your credentials and try again.');
-      throw error;
-    }
-  };
-
-  const signup = async (name: string, email: string, password: string) => {
-    try {
-      // Mock API call - in a real app, this would be an actual API call
-      if (name && email && password) {
-        const mockUser = {
-          id: 'new-' + Date.now().toString(),
-          name,
-          email,
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // For demo, accept any email with "demo@example.com"
+      if (email === 'demo@example.com' && password === 'password') {
+        const newUser = {
+          id: '1',
+          name: 'Demo User',
+          email: 'demo@example.com'
         };
         
-        setUser(mockUser);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(mockUser));
-        toast.success('Account created successfully!');
+        setUser(newUser);
+        localStorage.setItem('user', JSON.stringify(newUser));
         return;
       }
-      throw new Error('Invalid user data');
-    } catch (error) {
-      console.error('Signup failed:', error);
-      toast.error('Signup failed. Please try again.');
-      throw error;
+      
+      throw new Error('Invalid credentials');
+    } finally {
+      setIsLoading(false);
     }
   };
-
+  
+  // Signup function - in a real app, this would call an API
+  const signup = async (name: string, email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const newUser = {
+        id: Date.now().toString(),
+        name,
+        email
+      };
+      
+      setUser(newUser);
+      localStorage.setItem('user', JSON.stringify(newUser));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // Logout function
   const logout = () => {
     setUser(null);
-    setIsAuthenticated(false);
     localStorage.removeItem('user');
-    toast.success('Logged out successfully');
   };
+  
+  // Update profile function
+  const updateProfile = async (name: string) => {
+    setIsLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      if (user) {
+        const updatedUser = {
+          ...user,
+          name
+        };
+        
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const value = {
+    user,
+    isAuthenticated: !!user,
+    isLoading,
+    login,
+    signup,
+    logout,
+    updateProfile,
+  };
+  
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
 
-  return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, signup, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = (): AuthContextType => {
+export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}
