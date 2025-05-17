@@ -1,6 +1,7 @@
+
 import { useEffect, useRef, useState } from 'react';
-// Import fabric directly, not with the fabric-impl path
-import { fabric } from 'fabric';
+// Import fabric correctly as a default import
+import fabric from 'fabric';
 import { toast } from '@/components/ui/sonner';
 import { Toolbar } from './Toolbar';
 import { ColorPicker } from './ColorPicker';
