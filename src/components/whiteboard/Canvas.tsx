@@ -221,4 +221,3 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
     </div>
   );
 };
-</lov-add-dependency>fabric@latest</lov-add-dependency>
