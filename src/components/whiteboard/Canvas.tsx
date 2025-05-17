@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { fabric } from 'fabric';
+// Fix the fabric import to use the correct format 
+import { fabric } from 'fabric/fabric-impl';
 import { toast } from '@/components/ui/sonner';
 import { Toolbar } from './Toolbar';
 import { ColorPicker } from './ColorPicker';
