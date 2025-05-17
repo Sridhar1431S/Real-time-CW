@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
-// Import fabric correctly as a default import
-import fabric from 'fabric';
+// Import fabric using require syntax which works with how fabric.js is bundled
+import { Canvas as FabricCanvas } from 'fabric';
 import { toast } from '@/components/ui/sonner';
 import { Toolbar } from './Toolbar';
 import { ColorPicker } from './ColorPicker';
@@ -12,7 +12,7 @@ interface CanvasProps {
 
 export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | null>(null);
+  const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null);
   const [activeColor, setActiveColor] = useState('#000000');
   const [brushSize, setBrushSize] = useState(5);
   const [activeTool, setActiveTool] = useState<'select' | 'draw' | 'erase'>('select');
@@ -26,8 +26,8 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    // Use the correct way to create a fabric canvas
-    const canvas = new fabric.Canvas(canvasRef.current, {
+    // Create a fabric canvas with the correct Canvas constructor
+    const canvas = new FabricCanvas(canvasRef.current, {
       isDrawingMode: false,
       width: 800,
       height: 600,
@@ -170,19 +170,21 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
     if (!fabricCanvas) return;
     
     fabricCanvas.clear();
-    fabricCanvas.setBackgroundColor('#ffffff', () => {
-      fabricCanvas.renderAll();
-      saveCanvasState();
-    });
+    // Fix the TypeScript error by setting backgroundColor property directly instead of using setBackgroundColor
+    fabricCanvas.backgroundColor = '#ffffff';
+    fabricCanvas.renderAll();
+    saveCanvasState();
   };
 
   const handleSaveImage = () => {
     if (!fabricCanvas) return;
     
     try {
+      // Fix the TypeScript error by adding the required 'multiplier' property
       const dataURL = fabricCanvas.toDataURL({
         format: 'png',
         quality: 1,
+        multiplier: 1, // Add the required multiplier property
       });
       
       const link = document.createElement('a');
