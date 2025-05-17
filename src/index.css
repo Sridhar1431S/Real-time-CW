@@ -93,6 +93,33 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Improved responsiveness for mobile first approach */
+  h1 {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold;
+  }
+  
+  h2 {
+    @apply text-xl sm:text-2xl md:text-3xl font-bold;
+  }
+  
+  h3 {
+    @apply text-lg sm:text-xl md:text-2xl font-semibold;
+  }
+}
+
+@layer utilities {
+  .responsive-container {
+    @apply w-full px-4 sm:px-6 md:px-8 mx-auto;
+  }
+  
+  .responsive-padding {
+    @apply px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10;
+  }
+  
+  .responsive-grid {
+    @apply grid gap-4 sm:gap-6 md:gap-8;
+  }
 }
 
 .canvas-container {
@@ -131,4 +158,42 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 input[type="color"]::-webkit-color-swatch {
   border: none;
   border-radius: 4px;
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Responsive card and button improvements */
+.card-responsive {
+  @apply w-full max-w-md mx-auto;
+}
+
+.button-responsive {
+  @apply w-full sm:w-auto;
 }

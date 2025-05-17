@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { toast } from '@/components/ui/sonner';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -32,9 +33,11 @@ const Signup = () => {
     
     try {
       await signup(name, email, password);
+      toast.success('Account created successfully');
       navigate('/');
     } catch (err) {
       setError('Failed to create an account');
+      toast.error('Failed to create an account');
     } finally {
       setIsLoading(false);
     }
@@ -43,10 +46,10 @@ const Signup = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-1 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md animate-fadeIn">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">Create an Account</CardTitle>
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6">
+        <Card className="w-full max-w-md animate-fadeIn shadow-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-center">Create an Account</CardTitle>
             <CardDescription className="text-center">
               Join us to access all features
             </CardDescription>
@@ -65,6 +68,7 @@ const Signup = () => {
                   onChange={(e) => setName(e.target.value)}
                   required
                   className="w-full"
+                  autoComplete="name"
                 />
               </div>
               <div className="space-y-2">
@@ -79,6 +83,7 @@ const Signup = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full"
+                  autoComplete="email"
                 />
               </div>
               <div className="space-y-2">
@@ -93,6 +98,7 @@ const Signup = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full"
+                  autoComplete="new-password"
                 />
               </div>
               <div className="space-y-2">
@@ -107,12 +113,13 @@ const Signup = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   className="w-full"
+                  autoComplete="new-password"
                 />
               </div>
               {error && <p className="text-destructive text-sm">{error}</p>}
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full mt-6"
                 disabled={isLoading}
               >
                 {isLoading ? 'Creating account...' : 'Sign Up'}
@@ -122,7 +129,7 @@ const Signup = () => {
           <CardFooter className="flex justify-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary-600 hover:underline font-medium">
+              <Link to="/login" className="text-primary hover:underline font-medium">
                 Log in
               </Link>
             </p>

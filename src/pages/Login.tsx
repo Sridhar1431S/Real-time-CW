@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { toast } from '@/components/ui/sonner';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -27,9 +28,11 @@ const Login = () => {
     
     try {
       await login(email, password);
+      toast.success('Successfully logged in');
       navigate(from, { replace: true });
     } catch (err) {
       setError('Invalid email or password');
+      toast.error('Failed to log in');
     } finally {
       setIsLoading(false);
     }
@@ -38,10 +41,10 @@ const Login = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-1 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md animate-fadeIn">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">Welcome Back!</CardTitle>
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6">
+        <Card className="w-full max-w-md animate-fadeIn shadow-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-center">Welcome Back!</CardTitle>
             <CardDescription className="text-center">
               Enter your credentials to access your account
             </CardDescription>
@@ -60,6 +63,7 @@ const Login = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full"
+                  autoComplete="email"
                 />
               </div>
               <div className="space-y-2">
@@ -67,9 +71,9 @@ const Login = () => {
                   <label htmlFor="password" className="text-sm font-medium">
                     Password
                   </label>
-                  <a href="#" className="text-xs text-primary-600 hover:underline">
+                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
                 <Input
                   id="password"
@@ -79,18 +83,19 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full"
+                  autoComplete="current-password"
                 />
               </div>
               {error && <p className="text-destructive text-sm">{error}</p>}
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full mt-6"
                 disabled={isLoading}
               >
                 {isLoading ? 'Logging in...' : 'Log In'}
               </Button>
-              <div className="text-center text-sm">
-                <p>Demo Credentials:</p>
+              <div className="text-center text-sm mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
+                <p className="font-medium">Demo Credentials:</p>
                 <p className="text-muted-foreground">Email: demo@example.com</p>
                 <p className="text-muted-foreground">Password: password</p>
               </div>
@@ -99,7 +104,7 @@ const Login = () => {
           <CardFooter className="flex justify-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-primary-600 hover:underline font-medium">
+              <Link to="/signup" className="text-primary hover:underline font-medium">
                 Sign up
               </Link>
             </p>
