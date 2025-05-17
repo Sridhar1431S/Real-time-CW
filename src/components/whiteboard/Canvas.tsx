@@ -1,7 +1,6 @@
-
 import { useEffect, useRef, useState } from 'react';
-// Fix the fabric import to use the correct format 
-import { fabric } from 'fabric/fabric-impl';
+// Import fabric directly, not with the fabric-impl path
+import { fabric } from 'fabric';
 import { toast } from '@/components/ui/sonner';
 import { Toolbar } from './Toolbar';
 import { ColorPicker } from './ColorPicker';
@@ -26,6 +25,7 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    // Use the correct way to create a fabric canvas
     const canvas = new fabric.Canvas(canvasRef.current, {
       isDrawingMode: false,
       width: 800,
