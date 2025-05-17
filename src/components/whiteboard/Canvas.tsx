@@ -34,8 +34,11 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
       backgroundColor: '#ffffff',
     });
 
-    canvas.freeDrawingBrush.color = activeColor;
-    canvas.freeDrawingBrush.width = brushSize;
+    // Make sure brush is initialized before setting properties
+    if (canvas.freeDrawingBrush) {
+      canvas.freeDrawingBrush.color = activeColor;
+      canvas.freeDrawingBrush.width = brushSize;
+    }
     
     // Save initial state
     saveCanvasState(canvas);
@@ -68,7 +71,7 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
   }, []);
 
   useEffect(() => {
-    if (!fabricCanvas) return;
+    if (!fabricCanvas || !fabricCanvas.freeDrawingBrush) return;
 
     fabricCanvas.isDrawingMode = activeTool === 'draw';
     
@@ -130,14 +133,14 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
 
   const handleColorChange = (color: string) => {
     setActiveColor(color);
-    if (fabricCanvas && fabricCanvas.isDrawingMode) {
+    if (fabricCanvas && fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.color = color;
     }
   };
 
   const handleBrushSizeChange = (size: number) => {
     setBrushSize(size);
-    if (fabricCanvas && fabricCanvas.isDrawingMode) {
+    if (fabricCanvas && fabricCanvas.isDrawingMode && fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.width = size;
     }
   };
