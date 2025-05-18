@@ -40,7 +40,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
 
   return (
     <div className={`flex items-center gap-2 ${isAnimated ? 'login-animate' : 'opacity-0'}`}>
-      <span className="text-xs font-medium mr-1 neon-text" style={{ color }}>Color:</span>
+      <span className="text-xs font-medium mr-1 neon-text text-primary">Color:</span>
       <div className="flex gap-1">
         <ToggleGroup type="single" value={PRESET_COLORS.includes(color) ? color : undefined}>
           {PRESET_COLORS.slice(0, 5).map((presetColor) => (
@@ -107,7 +107,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
               }}
               aria-label="Custom color"
             />
-            <span className="text-xs font-medium neon-text" style={{ color }}>Custom</span>
+            <span className="text-xs font-medium text-primary">Custom</span>
           </div>
         </PopoverContent>
       </Popover>

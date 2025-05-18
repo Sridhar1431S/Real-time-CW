@@ -50,7 +50,7 @@ const Whiteboard = () => {
           <div className={`space-y-4 sm:space-y-6 ${isAnimated ? 'login-animate' : 'opacity-0'}`}>
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight neon-text" style={{ color: activeColor }}>Collaborative Whiteboard</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight neon-text text-primary">Collaborative Whiteboard</h1>
                 <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
                   Create and share drawings with your team in real-time.
                 </p>
@@ -63,7 +63,6 @@ const Whiteboard = () => {
                   className="neon-btn neon-border"
                   style={{
                     '--neon-glow-color': activeColor,
-                    color: activeColor
                   } as React.CSSProperties}
                 >
                   Join Session
@@ -73,7 +72,6 @@ const Whiteboard = () => {
                   className="neon-btn neon-border"
                   style={{
                     '--neon-glow-color': activeColor,
-                    color: activeColor
                   } as React.CSSProperties}
                 >
                   New Session
@@ -94,7 +92,6 @@ const Whiteboard = () => {
                   className="w-full xs:w-auto neon-btn neon-border"
                   style={{
                     '--neon-glow-color': activeColor,
-                    color: activeColor
                   } as React.CSSProperties}
                 >
                   Join

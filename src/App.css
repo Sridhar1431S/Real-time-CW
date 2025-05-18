@@ -45,6 +45,7 @@
 /* Enhanced Neon effect utilities */
 .neon-text {
   text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+  transition: text-shadow 0.3s ease;
 }
 
 .neon-border {
@@ -182,4 +183,44 @@
 
 .login-container-glow {
   animation: glowPulse 3s infinite;
+}
+
+/* Card neon styles */
+.card-neon {
+  position: relative;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-neon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--neon-color-from, #3498db), var(--neon-color-to, #2ecc71));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Image classification neon styles */
+.classify-container {
+  --neon-color-from: #9b59b6;
+  --neon-color-to: #8e44ad;
+  --neon-glow-color: #9b59b6;
+}
+
+/* Profile page neon styles */
+.profile-container {
+  --neon-color-from: #2ecc71;
+  --neon-color-to: #27ae60;
+  --neon-glow-color: #2ecc71;
 }

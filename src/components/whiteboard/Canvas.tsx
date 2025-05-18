@@ -286,7 +286,7 @@ export const Canvas: React.FC<CanvasProps> = ({
           activeTool={activeTool} 
           onToolChange={handleToolChange}
           brushSize={brushSize}
-          onBrushSizeChange={handleBrushSizeChange}
+          onBrushSizeChange={setBrushSize}
           canUndo={canUndo}
           canRedo={canRedo}
           onUndo={handleUndo}
@@ -298,8 +298,10 @@ export const Canvas: React.FC<CanvasProps> = ({
       </div>
       <div className={`canvas-container border-2 rounded-lg shadow-lg overflow-hidden cursor-${activeTool === 'draw' ? 'crosshair' : activeTool === 'erase' ? 'cell' : 'default'} neon-container`}
            style={{
-             boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}, 0 0 15px ${activeColor}, 0 0 20px ${activeColor}`
-           }}>
+             '--neon-color-from': activeColor,
+             '--neon-color-to': activeColor,
+             '--neon-glow-color': activeColor
+           } as React.CSSProperties}>
         <canvas ref={canvasRef} className="touch-none" />
       </div>
     </div>
