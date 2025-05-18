@@ -35,7 +35,7 @@ const Whiteboard = () => {
     <AuthGuard>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-1 py-6 sm:py-8 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <main className="flex-1 py-6 sm:py-8 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-16">
           <div className="space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <div>

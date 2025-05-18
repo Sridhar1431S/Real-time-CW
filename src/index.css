@@ -92,6 +92,7 @@
 
   body {
     @apply bg-background text-foreground;
+    padding-top: 4rem; /* Add padding to account for fixed navbar */
   }
 
   /* Improved responsiveness for mobile first approach */
@@ -239,4 +240,9 @@ input[type="color"]::-webkit-color-swatch {
 /* Improved touch targets for mobile */
 .touch-target-large {
   @apply min-h-[44px] min-w-[44px];
+}
+
+/* Fixed header spacing adjustments */
+main {
+  transition: padding-top 0.3s ease;
 }

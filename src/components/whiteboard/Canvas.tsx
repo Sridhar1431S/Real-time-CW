@@ -1,6 +1,5 @@
 
 import { useEffect, useRef, useState } from 'react';
-// Import fabric using require syntax which works with how fabric.js is bundled
 import { Canvas as FabricCanvas } from 'fabric';
 import { toast } from '@/components/ui/sonner';
 import { Toolbar } from './Toolbar';
@@ -26,109 +25,126 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    // Create a fabric canvas with the correct Canvas constructor
-    const canvas = new FabricCanvas(canvasRef.current, {
-      isDrawingMode: false,
-      width: 800,
-      height: 600,
-      backgroundColor: '#ffffff',
-    });
-
-    // Make sure brush is initialized before setting properties
-    if (canvas.freeDrawingBrush) {
-      canvas.freeDrawingBrush.color = activeColor;
-      canvas.freeDrawingBrush.width = brushSize;
-    }
-    
-    // Save initial state
-    saveCanvasState(canvas);
-
-    setFabricCanvas(canvas);
-    
-    // Handle window resize
-    const handleResize = () => {
-      const container = canvas.getElement().parentElement;
-      if (!container) return;
-      
-      const containerWidth = container.clientWidth;
-      const scale = containerWidth / canvas.getWidth();
-      
-      const zoom = scale < 1 ? scale : 1;
-      canvas.setZoom(zoom);
-      canvas.setDimensions({
-        width: containerWidth,
-        height: canvas.getHeight() * zoom,
+    try {
+      // Create a fabric canvas with the correct Canvas constructor
+      const canvas = new FabricCanvas(canvasRef.current, {
+        isDrawingMode: false,
+        width: 800,
+        height: 600,
+        backgroundColor: '#ffffff',
       });
-    };
 
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    
-    return () => {
-      canvas.dispose();
-      window.removeEventListener('resize', handleResize);
-    };
+      // Initialize brush after canvas creation but check if it exists
+      if (canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.color = activeColor;
+        canvas.freeDrawingBrush.width = brushSize;
+      }
+      
+      // Save initial state
+      saveCanvasState(canvas);
+
+      setFabricCanvas(canvas);
+      
+      // Handle window resize
+      const handleResize = () => {
+        const container = canvas.getElement().parentElement;
+        if (!container) return;
+        
+        const containerWidth = container.clientWidth;
+        const scale = containerWidth / canvas.getWidth();
+        
+        const zoom = scale < 1 ? scale : 1;
+        canvas.setZoom(zoom);
+        canvas.setDimensions({
+          width: containerWidth,
+          height: canvas.getHeight() * zoom,
+        });
+      };
+
+      window.addEventListener('resize', handleResize);
+      handleResize();
+      
+      return () => {
+        canvas.dispose();
+        window.removeEventListener('resize', handleResize);
+      };
+    } catch (error) {
+      console.error("Error initializing canvas:", error);
+      toast.error("Failed to initialize canvas");
+    }
   }, []);
 
   useEffect(() => {
-    if (!fabricCanvas || !fabricCanvas.freeDrawingBrush) return;
-
-    fabricCanvas.isDrawingMode = activeTool === 'draw';
+    if (!fabricCanvas) return;
     
-    if (activeTool === 'draw') {
-      fabricCanvas.freeDrawingBrush.color = activeColor;
-      fabricCanvas.freeDrawingBrush.width = brushSize;
-    } else if (activeTool === 'erase') {
-      // Set up eraser behavior
-      fabricCanvas.isDrawingMode = true;
-      fabricCanvas.freeDrawingBrush.color = '#ffffff';
-      fabricCanvas.freeDrawingBrush.width = brushSize * 2;
+    try {
+      fabricCanvas.isDrawingMode = activeTool === 'draw';
+      
+      if (activeTool === 'draw' && fabricCanvas.freeDrawingBrush) {
+        fabricCanvas.freeDrawingBrush.color = activeColor;
+        fabricCanvas.freeDrawingBrush.width = brushSize;
+      } else if (activeTool === 'erase' && fabricCanvas.freeDrawingBrush) {
+        // Set up eraser behavior
+        fabricCanvas.isDrawingMode = true;
+        fabricCanvas.freeDrawingBrush.color = '#ffffff';
+        fabricCanvas.freeDrawingBrush.width = brushSize * 2;
+      }
+    } catch (error) {
+      console.error("Error updating canvas tool:", error);
     }
-
   }, [activeTool, activeColor, brushSize, fabricCanvas]);
 
   // Save canvas state to history
   const saveCanvasState = (canvas = fabricCanvas) => {
     if (!canvas) return;
     
-    // Get current state as JSON
-    const json = JSON.stringify(canvas.toJSON());
-    
-    // If we're at a point in history and making a new change, 
-    // remove all future states
-    if (historyIndexRef.current < historyRef.current.length - 1) {
-      historyRef.current = historyRef.current.slice(0, historyIndexRef.current + 1);
+    try {
+      // Get current state as JSON
+      const json = JSON.stringify(canvas.toJSON());
+      
+      // If we're at a point in history and making a new change, 
+      // remove all future states
+      if (historyIndexRef.current < historyRef.current.length - 1) {
+        historyRef.current = historyRef.current.slice(0, historyIndexRef.current + 1);
+      }
+      
+      historyRef.current.push(json);
+      historyIndexRef.current = historyRef.current.length - 1;
+      
+      // Update undo/redo availability
+      setCanUndo(historyIndexRef.current > 0);
+      setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+    } catch (error) {
+      console.error("Error saving canvas state:", error);
     }
-    
-    historyRef.current.push(json);
-    historyIndexRef.current = historyRef.current.length - 1;
-    
-    // Update undo/redo availability
-    setCanUndo(historyIndexRef.current > 0);
-    setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
   };
 
   // Register object modified event
   useEffect(() => {
     if (!fabricCanvas) return;
     
-    const handleModified = () => {
-      saveCanvasState();
-    };
-    
-    fabricCanvas.on('object:added', handleModified);
-    fabricCanvas.on('object:modified', handleModified);
-    fabricCanvas.on('object:removed', handleModified);
-    
-    return () => {
-      fabricCanvas.off('object:added', handleModified);
-      fabricCanvas.off('object:modified', handleModified);
-      fabricCanvas.off('object:removed', handleModified);
-    };
+    try {
+      const handleModified = () => {
+        saveCanvasState();
+      };
+      
+      fabricCanvas.on('object:added', handleModified);
+      fabricCanvas.on('object:modified', handleModified);
+      fabricCanvas.on('object:removed', handleModified);
+      
+      return () => {
+        fabricCanvas.off('object:added', handleModified);
+        fabricCanvas.off('object:modified', handleModified);
+        fabricCanvas.off('object:removed', handleModified);
+      };
+    } catch (error) {
+      console.error("Error setting up canvas event handlers:", error);
+    }
   }, [fabricCanvas]);
 
   const handleToolChange = (tool: typeof activeTool) => {
     setActiveTool(tool);
+    toast.info(`Tool changed to: ${tool}`);
   };
 
   const handleColorChange = (color: string) => {
@@ -146,37 +162,65 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
   };
 
   const handleUndo = () => {
-    if (!fabricCanvas || historyIndexRef.current <= 0) return;
+    if (!fabricCanvas || historyIndexRef.current <= 0) {
+      if (historyIndexRef.current <= 0) {
+        toast.info("Nothing to undo");
+      }
+      return;
+    }
     
-    historyIndexRef.current--;
-    const json = historyRef.current[historyIndexRef.current];
-    fabricCanvas.loadFromJSON(json, () => {
-      fabricCanvas.renderAll();
-      setCanUndo(historyIndexRef.current > 0);
-      setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
-    });
+    try {
+      historyIndexRef.current--;
+      const json = historyRef.current[historyIndexRef.current];
+      fabricCanvas.loadFromJSON(json, () => {
+        fabricCanvas.renderAll();
+        setCanUndo(historyIndexRef.current > 0);
+        setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+        toast.success("Undo successful");
+      });
+    } catch (error) {
+      console.error("Error during undo operation:", error);
+      toast.error("Failed to undo");
+    }
   };
 
   const handleRedo = () => {
-    if (!fabricCanvas || historyIndexRef.current >= historyRef.current.length - 1) return;
+    if (!fabricCanvas || historyIndexRef.current >= historyRef.current.length - 1) {
+      if (historyIndexRef.current >= historyRef.current.length - 1) {
+        toast.info("Nothing to redo");
+      }
+      return;
+    }
     
-    historyIndexRef.current++;
-    const json = historyRef.current[historyIndexRef.current];
-    fabricCanvas.loadFromJSON(json, () => {
-      fabricCanvas.renderAll();
-      setCanUndo(historyIndexRef.current > 0);
-      setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
-    });
+    try {
+      historyIndexRef.current++;
+      const json = historyRef.current[historyIndexRef.current];
+      fabricCanvas.loadFromJSON(json, () => {
+        fabricCanvas.renderAll();
+        setCanUndo(historyIndexRef.current > 0);
+        setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+        toast.success("Redo successful");
+      });
+    } catch (error) {
+      console.error("Error during redo operation:", error);
+      toast.error("Failed to redo");
+    }
   };
 
   const handleClear = () => {
     if (!fabricCanvas) return;
     
-    fabricCanvas.clear();
-    // Fix the TypeScript error by setting backgroundColor property directly instead of using setBackgroundColor
-    fabricCanvas.backgroundColor = '#ffffff';
-    fabricCanvas.renderAll();
-    saveCanvasState();
+    try {
+      fabricCanvas.clear();
+      // Fix the TypeScript error by setting backgroundColor property directly instead of using setBackgroundColor
+      fabricCanvas.backgroundColor = '#ffffff';
+      fabricCanvas.renderAll();
+      saveCanvasState();
+      toast.success("Canvas cleared");
+    } catch (error) {
+      console.error("Error clearing canvas:", error);
+      toast.error("Failed to clear canvas");
+    }
   };
 
   const handleSaveImage = () => {
