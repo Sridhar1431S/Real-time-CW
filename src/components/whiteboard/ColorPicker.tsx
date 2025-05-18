@@ -38,12 +38,13 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
             <ToggleGroupItem 
               key={presetColor} 
               value={presetColor}
-              className="w-6 h-6 p-0 rounded-md"
+              className="w-6 h-6 p-0 rounded-md neon-color-item"
               style={{ 
                 backgroundColor: presetColor, 
                 border: '1px solid #e2e8f0',
                 borderColor: color === presetColor ? '#3498db' : '#e2e8f0',
                 outline: color === presetColor ? '2px solid #3498db' : 'none',
+                boxShadow: color === presetColor ? `0 0 5px ${presetColor}` : 'none',
               }}
               onClick={() => onChange(presetColor)}
               aria-label={`Color ${presetColor}`}
@@ -55,24 +56,26 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
       <Popover>
         <PopoverTrigger asChild>
           <button
-            className="w-6 h-6 rounded-md border overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="w-6 h-6 rounded-md border overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 neon-color-trigger"
             style={{ 
               backgroundColor: color,
               outline: '1px solid #e2e8f0',
+              boxShadow: `0 0 5px ${color}, 0 0 10px ${color}`
             }}
             aria-label="Custom color picker"
           />
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-3" align="start">
+        <PopoverContent className="w-auto p-3 neon-color-popover" align="start">
           <div className="grid grid-cols-5 gap-2">
             {PRESET_COLORS.map((presetColor) => (
               <button
                 key={presetColor}
-                className="w-6 h-6 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                className="w-6 h-6 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 neon-color-option"
                 style={{ 
                   backgroundColor: presetColor,
                   border: '2px solid',
                   borderColor: color === presetColor ? '#3498db' : 'transparent',
+                  boxShadow: color === presetColor ? `0 0 5px ${presetColor}` : 'none',
                 }}
                 onClick={() => onChange(presetColor)}
                 aria-label={`Color ${presetColor}`}

@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { Canvas as FabricCanvas } from 'fabric';
+import { Canvas as FabricCanvas, PencilBrush } from 'fabric';
 import { toast } from '@/components/ui/sonner';
 import { Toolbar } from './Toolbar';
 import { ColorPicker } from './ColorPicker';
@@ -35,12 +35,12 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
       });
 
       // Initialize brush
-      if (canvas.freeDrawingBrush) {
-        canvas.freeDrawingBrush.color = activeColor;
-        canvas.freeDrawingBrush.width = brushSize;
-      } else {
-        console.error("Free drawing brush not available");
-      }
+      canvas.freeDrawingBrush = new PencilBrush(canvas);
+      canvas.freeDrawingBrush.color = activeColor;
+      canvas.freeDrawingBrush.width = brushSize;
+      
+      console.log("Canvas initialized:", canvas);
+      console.log("Drawing brush initialized:", canvas.freeDrawingBrush);
       
       // Save initial state
       saveCanvasState(canvas);
@@ -281,7 +281,10 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
         />
         <ColorPicker color={activeColor} onChange={handleColorChange} />
       </div>
-      <div className={`canvas-container border-2 rounded-lg shadow-lg overflow-hidden cursor-${activeTool === 'draw' ? 'crosshair' : activeTool === 'erase' ? 'cell' : 'default'}`}>
+      <div className={`canvas-container border-2 rounded-lg shadow-lg overflow-hidden cursor-${activeTool === 'draw' ? 'crosshair' : activeTool === 'erase' ? 'cell' : 'default'} neon-container`}
+           style={{
+             boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}, 0 0 15px ${activeColor}, 0 0 20px ${activeColor}`
+           }}>
         <canvas ref={canvasRef} className="touch-none" />
       </div>
     </div>

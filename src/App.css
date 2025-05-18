@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -40,3 +41,27 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Neon effect utilities */
+.neon-text {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+}
+
+.neon-border {
+  box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  transition: box-shadow 0.3s ease;
+}
+
+.neon-border:hover {
+  box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+}
+
+.neon-glow {
+  filter: drop-shadow(0 0 5px currentColor);
+  transition: filter 0.3s ease;
+}
+
+.neon-glow:hover {
+  filter: drop-shadow(0 0 10px currentColor);
+}
+

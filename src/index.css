@@ -43,6 +43,11 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Neon colors */
+    --neon-primary: 201 75% 53%;
+    --neon-secondary: 145 78% 49%;
+    --neon-accent: 6 76% 57%;
   }
 
   .dark {
@@ -150,11 +155,68 @@
   }
 }
 
+/* Neon effect styles */
+.neon-container {
+  transition: box-shadow 0.3s ease;
+}
+
+.neon-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.neon-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+  pointer-events: none;
+}
+
+.neon-btn:hover:before {
+  left: 100%;
+}
+
+.neon-color-item {
+  transition: all 0.3s ease;
+}
+
+.neon-color-item:hover {
+  transform: scale(1.1);
+}
+
+.neon-color-trigger {
+  transition: all 0.3s ease;
+}
+
+.neon-color-trigger:hover {
+  transform: scale(1.1);
+}
+
+.neon-color-option {
+  transition: all 0.2s ease;
+}
+
+.neon-color-option:hover {
+  transform: scale(1.15);
+}
+
 .canvas-container {
   width: 100%;
   height: 100%;
   position: relative;
   user-select: none;
+  transition: box-shadow 0.3s ease;
 }
 
 /* Making the canvas responsive */
@@ -209,12 +271,28 @@ input[type="color"]::-webkit-color-swatch {
   }
 }
 
+@keyframes neonPulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-in-out;
 }
 
 .animate-slideUp {
   animation: slideUp 0.5s ease-out;
+}
+
+.animate-neonPulse {
+  animation: neonPulse 2s infinite;
 }
 
 /* Responsive card and button improvements */

@@ -12,6 +12,7 @@ const Whiteboard = () => {
   const [sessionId, setSessionId] = useState<string>('default-session');
   const [newSessionId, setNewSessionId] = useState<string>('');
   const [isJoining, setIsJoining] = useState<boolean>(false);
+  const [activeColor, setActiveColor] = useState<string>('#3498db'); // Default neon color
 
   const handleJoinSession = () => {
     if (!newSessionId.trim()) {
@@ -46,10 +47,25 @@ const Whiteboard = () => {
               </div>
               
               <div className="flex flex-col xs:flex-row sm:flex-row gap-2">
-                <Button onClick={() => setIsJoining(!isJoining)} variant="outline" responsive={true}>
+                <Button 
+                  onClick={() => setIsJoining(!isJoining)} 
+                  variant="outline" 
+                  responsive={true}
+                  className="neon-btn"
+                  style={{
+                    boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
+                  }}
+                >
                   Join Session
                 </Button>
-                <Button onClick={createNewSession} responsive={true}>
+                <Button 
+                  onClick={createNewSession} 
+                  responsive={true}
+                  className="neon-btn"
+                  style={{
+                    boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
+                  }}
+                >
                   New Session
                 </Button>
               </div>
@@ -63,13 +79,22 @@ const Whiteboard = () => {
                   onChange={(e) => setNewSessionId(e.target.value)}
                   className="flex-grow max-w-full xs:max-w-xs"
                 />
-                <Button onClick={handleJoinSession} className="w-full xs:w-auto">
+                <Button 
+                  onClick={handleJoinSession} 
+                  className="w-full xs:w-auto neon-btn"
+                  style={{
+                    boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
+                  }}
+                >
                   Join
                 </Button>
               </div>
             )}
             
-            <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+            <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md neon-container"
+                 style={{
+                   boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
+                 }}>
               <div className="mb-3 flex flex-col xs:flex-row xs:items-center xs:justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs sm:text-sm font-semibold">Current Session:</span>
@@ -89,7 +114,9 @@ const Whiteboard = () => {
               </div>
               
               <div className="h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
-                <Canvas sessionId={sessionId} />
+                <Canvas 
+                  sessionId={sessionId} 
+                />
               </div>
             </div>
           </div>
