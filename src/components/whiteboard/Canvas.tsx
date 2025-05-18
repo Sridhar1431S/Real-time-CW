@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import { Canvas as FabricCanvas, PencilBrush } from 'fabric';
 import { toast } from '@/components/ui/sonner';
@@ -7,9 +6,13 @@ import { ColorPicker } from './ColorPicker';
 
 interface CanvasProps {
   sessionId?: string;
+  onColorChange?: (color: string) => void;
 }
 
-export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' }) => {
+export const Canvas: React.FC<CanvasProps> = ({ 
+  sessionId = 'default-session',
+  onColorChange 
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null);
   const [activeColor, setActiveColor] = useState('#000000');
@@ -162,12 +165,24 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
     toast.info(`Tool changed to: ${tool}`);
   };
 
+  // Update onColorChange when activeColor changes
+  useEffect(() => {
+    if (onColorChange) {
+      onColorChange(activeColor);
+    }
+  }, [activeColor, onColorChange]);
+
   const handleColorChange = (color: string) => {
     setActiveColor(color);
     console.log("Color changed to:", color);
     if (fabricCanvas && fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.color = color;
       console.log("Brush color updated to:", color);
+    }
+    
+    // Pass color change to parent component if callback provided
+    if (onColorChange) {
+      onColorChange(color);
     }
   };
 
