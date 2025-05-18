@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ImageDropzone } from '@/components/ImageDropzone';
@@ -36,6 +36,16 @@ const ImageClassify = () => {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [isClassifying, setIsClassifying] = useState(false);
   const [classificationResults, setClassificationResults] = useState<typeof mockClassifications | null>(null);
+  const [isAnimated, setIsAnimated] = useState(false);
+  
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsAnimated(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   const handleImageUpload = (file: File) => {
     setUploadedImage(file);
@@ -60,42 +70,47 @@ const ImageClassify = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mt-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6 animate-fadeIn">
+          <div className={`space-y-6 ${isAnimated ? 'login-animate' : 'opacity-0'}`}>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Image Classification</h1>
+              <h1 className="text-3xl font-bold tracking-tight neon-text" style={{ color: '#2ecc71' }}>Image Classification</h1>
               <p className="mt-2 text-gray-600">
                 Upload an image and our AI will analyze and classify it for you.
               </p>
             </div>
             
-            <ImageDropzone onImageUpload={handleImageUpload} />
+            <div className="neon-container neon-accent">
+              <ImageDropzone onImageUpload={handleImageUpload} />
+            </div>
             
             <Button
               onClick={handleClassify}
               disabled={!uploadedImage || isClassifying}
-              className="w-full"
+              className="w-full neon-border"
+              style={{
+                '--neon-glow-color': '#2ecc71',
+              } as React.CSSProperties}
             >
               {isClassifying ? 'Analyzing Image...' : 'Classify Image'}
               {!isClassifying && <ArrowRight className="ml-2 h-4 w-4" />}
             </Button>
           </div>
           
-          <div className="animate-slideUp">
+          <div className={`${isAnimated ? 'login-animate' : 'opacity-0'}`} style={{ animationDelay: "0.3s" }}>
             {isClassifying ? (
-              <Card className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Processing Image</h2>
+              <Card className="p-6 neon-container neon-secondary">
+                <h2 className="text-xl font-semibold mb-4 neon-text">Processing Image</h2>
                 <Progress value={45} className="mb-2" />
                 <p className="text-sm text-gray-500">Analyzing patterns and features...</p>
               </Card>
             ) : classificationResults ? (
-              <Card>
+              <Card className="neon-container neon-secondary">
                 <CardContent className="pt-6">
-                  <h2 className="text-xl font-semibold mb-4">Classification Results</h2>
+                  <h2 className="text-xl font-semibold mb-4 neon-text">Classification Results</h2>
                   <div className="space-y-4">
                     {classificationResults.map((result, index) => (
-                      <div key={index}>
+                      <div key={index} className={`login-field-animate ${isAnimated ? '' : 'opacity-0'}`} style={{ animationDelay: `${0.2 + index * 0.1}s` }}>
                         <div className="flex justify-between items-center mb-1">
                           <span className="font-medium capitalize">{result.category}</span>
                           <span className="text-sm font-mono">
@@ -115,7 +130,7 @@ const ImageClassify = () => {
                 </CardContent>
               </Card>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-6">
+              <div className="h-full flex flex-col items-center justify-center text-center p-6 neon-container neon-primary">
                 <div className="text-gray-400 mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

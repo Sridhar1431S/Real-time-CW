@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -16,9 +16,19 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isAnimated, setIsAnimated] = useState(false);
   
   const navigate = useNavigate();
   const { signup } = useAuth();
+  
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsAnimated(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,16 +57,18 @@ const Signup = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6">
-        <Card className="w-full max-w-md animate-fadeIn shadow-lg">
+        <Card 
+          className={`w-full max-w-md shadow-lg neon-container neon-secondary login-container-glow ${isAnimated ? 'login-animate' : 'opacity-0'}`}
+        >
           <CardHeader className="space-y-1">
-            <CardTitle className="text-xl sm:text-2xl font-bold text-center">Create an Account</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl font-bold text-center neon-text">Create an Account</CardTitle>
             <CardDescription className="text-center">
               Join us to access all features
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
+              <div className={`space-y-2 login-field-animate login-field-1 ${isAnimated ? '' : 'opacity-0'}`}>
                 <label htmlFor="name" className="text-sm font-medium">
                   Full Name
                 </label>
@@ -71,7 +83,7 @@ const Signup = () => {
                   autoComplete="name"
                 />
               </div>
-              <div className="space-y-2">
+              <div className={`space-y-2 login-field-animate ${isAnimated ? '' : 'opacity-0'}`} style={{ animationDelay: "0.3s" }}>
                 <label htmlFor="email" className="text-sm font-medium">
                   Email address
                 </label>
@@ -86,7 +98,7 @@ const Signup = () => {
                   autoComplete="email"
                 />
               </div>
-              <div className="space-y-2">
+              <div className={`space-y-2 login-field-animate ${isAnimated ? '' : 'opacity-0'}`} style={{ animationDelay: "0.5s" }}>
                 <label htmlFor="password" className="text-sm font-medium">
                   Password
                 </label>
@@ -101,7 +113,7 @@ const Signup = () => {
                   autoComplete="new-password"
                 />
               </div>
-              <div className="space-y-2">
+              <div className={`space-y-2 login-field-animate ${isAnimated ? '' : 'opacity-0'}`} style={{ animationDelay: "0.7s" }}>
                 <label htmlFor="confirmPassword" className="text-sm font-medium">
                   Confirm Password
                 </label>
@@ -119,7 +131,10 @@ const Signup = () => {
               {error && <p className="text-destructive text-sm">{error}</p>}
               <Button
                 type="submit"
-                className="w-full mt-6"
+                className={`w-full mt-6 neon-border login-button-animate ${isAnimated ? '' : 'opacity-0'}`}
+                style={{
+                  '--neon-glow-color': '#2ecc71',
+                } as React.CSSProperties}
                 disabled={isLoading}
               >
                 {isLoading ? 'Creating account...' : 'Sign Up'}
@@ -129,7 +144,7 @@ const Signup = () => {
           <CardFooter className="flex justify-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary hover:underline font-medium">
+              <Link to="/login" className="text-primary hover:underline font-medium neon-text">
                 Log in
               </Link>
             </p>

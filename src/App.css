@@ -42,7 +42,7 @@
   color: #888;
 }
 
-/* Neon effect utilities */
+/* Enhanced Neon effect utilities */
 .neon-text {
   text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
 }
@@ -65,3 +65,121 @@
   filter: drop-shadow(0 0 10px currentColor);
 }
 
+/* Professional neon container effects */
+.neon-container {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.neon-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--neon-color-from, #3498db), var(--neon-color-to, #2ecc71));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.neon-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 0px;
+  box-shadow: 0 0 15px 2px var(--neon-glow-color, #3498db);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Neon color themes */
+.neon-primary {
+  --neon-color-from: #3498db;
+  --neon-color-to: #2980b9;
+  --neon-glow-color: #3498db;
+}
+
+.neon-secondary {
+  --neon-color-from: #2ecc71;
+  --neon-color-to: #27ae60;
+  --neon-glow-color: #2ecc71;
+}
+
+.neon-accent {
+  --neon-color-from: #e74c3c;
+  --neon-color-to: #c0392b;
+  --neon-glow-color: #e74c3c;
+}
+
+.neon-purple {
+  --neon-color-from: #9b59b6;
+  --neon-color-to: #8e44ad;
+  --neon-glow-color: #9b59b6;
+}
+
+/* Login animation effects */
+@keyframes floatIn {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 5px var(--neon-glow-color, #3498db),
+                0 0 10px var(--neon-glow-color, #3498db);
+  }
+  50% {
+    box-shadow: 0 0 15px var(--neon-glow-color, #3498db),
+                0 0 25px var(--neon-glow-color, #3498db);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--neon-glow-color, #3498db),
+                0 0 10px var(--neon-glow-color, #3498db);
+  }
+}
+
+.login-animate {
+  animation: floatIn 0.6s ease-out forwards;
+}
+
+.login-field-animate {
+  opacity: 0;
+  animation: floatIn 0.5s ease-out forwards;
+}
+
+.login-field-1 {
+  animation-delay: 0.2s;
+}
+
+.login-field-2 {
+  animation-delay: 0.4s;
+}
+
+.login-field-3 {
+  animation-delay: 0.6s;
+}
+
+.login-button-animate {
+  opacity: 0;
+  animation: floatIn 0.5s ease-out 0.8s forwards;
+}
+
+.login-container-glow {
+  animation: glowPulse 3s infinite;
+}

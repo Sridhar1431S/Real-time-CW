@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Canvas } from '@/components/whiteboard/Canvas';
@@ -13,6 +13,16 @@ const Whiteboard = () => {
   const [newSessionId, setNewSessionId] = useState<string>('');
   const [isJoining, setIsJoining] = useState<boolean>(false);
   const [activeColor, setActiveColor] = useState<string>('#3498db'); // Default neon color
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsAnimated(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleJoinSession = () => {
     if (!newSessionId.trim()) {
@@ -37,10 +47,10 @@ const Whiteboard = () => {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-1 py-6 sm:py-8 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-16">
-          <div className="space-y-4 sm:space-y-6">
+          <div className={`space-y-4 sm:space-y-6 ${isAnimated ? 'login-animate' : 'opacity-0'}`}>
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Collaborative Whiteboard</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight neon-text" style={{ color: activeColor }}>Collaborative Whiteboard</h1>
                 <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
                   Create and share drawings with your team in real-time.
                 </p>
@@ -50,21 +60,21 @@ const Whiteboard = () => {
                 <Button 
                   onClick={() => setIsJoining(!isJoining)} 
                   variant="outline" 
-                  responsive={true}
-                  className="neon-btn"
+                  className="neon-btn neon-border"
                   style={{
-                    boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
-                  }}
+                    '--neon-glow-color': activeColor,
+                    color: activeColor
+                  } as React.CSSProperties}
                 >
                   Join Session
                 </Button>
                 <Button 
                   onClick={createNewSession} 
-                  responsive={true}
-                  className="neon-btn"
+                  className="neon-btn neon-border"
                   style={{
-                    boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
-                  }}
+                    '--neon-glow-color': activeColor,
+                    color: activeColor
+                  } as React.CSSProperties}
                 >
                   New Session
                 </Button>
@@ -81,20 +91,25 @@ const Whiteboard = () => {
                 />
                 <Button 
                   onClick={handleJoinSession} 
-                  className="w-full xs:w-auto neon-btn"
+                  className="w-full xs:w-auto neon-btn neon-border"
                   style={{
-                    boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
-                  }}
+                    '--neon-glow-color': activeColor,
+                    color: activeColor
+                  } as React.CSSProperties}
                 >
                   Join
                 </Button>
               </div>
             )}
             
-            <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md neon-container"
-                 style={{
-                   boxShadow: `0 0 5px ${activeColor}, 0 0 10px ${activeColor}`
-                 }}>
+            <div 
+              className="bg-white p-3 sm:p-4 rounded-lg shadow-md neon-container login-container-glow"
+              style={{
+                '--neon-color-from': activeColor,
+                '--neon-color-to': activeColor,
+                '--neon-glow-color': activeColor
+              } as React.CSSProperties}
+            >
               <div className="mb-3 flex flex-col xs:flex-row xs:items-center xs:justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs sm:text-sm font-semibold">Current Session:</span>
@@ -115,7 +130,8 @@ const Whiteboard = () => {
               
               <div className="h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
                 <Canvas 
-                  sessionId={sessionId} 
+                  sessionId={sessionId}
+                  onColorChange={setActiveColor}
                 />
               </div>
             </div>

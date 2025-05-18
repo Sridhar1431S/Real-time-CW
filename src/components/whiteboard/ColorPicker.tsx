@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
@@ -23,6 +23,15 @@ const PRESET_COLORS = [
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
   const [customColor, setCustomColor] = useState(color);
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsAnimated(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleColorChange = (newColor: string) => {
     setCustomColor(newColor);
@@ -30,8 +39,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs font-medium mr-1">Color:</span>
+    <div className={`flex items-center gap-2 ${isAnimated ? 'login-animate' : 'opacity-0'}`}>
+      <span className="text-xs font-medium mr-1 neon-text" style={{ color }}>Color:</span>
       <div className="flex gap-1">
         <ToggleGroup type="single" value={PRESET_COLORS.includes(color) ? color : undefined}>
           {PRESET_COLORS.slice(0, 5).map((presetColor) => (
@@ -42,9 +51,9 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
               style={{ 
                 backgroundColor: presetColor, 
                 border: '1px solid #e2e8f0',
-                borderColor: color === presetColor ? '#3498db' : '#e2e8f0',
-                outline: color === presetColor ? '2px solid #3498db' : 'none',
-                boxShadow: color === presetColor ? `0 0 5px ${presetColor}` : 'none',
+                borderColor: color === presetColor ? presetColor : '#e2e8f0',
+                outline: color === presetColor ? `2px solid ${presetColor}` : 'none',
+                boxShadow: color === presetColor ? `0 0 8px ${presetColor}` : 'none',
               }}
               onClick={() => onChange(presetColor)}
               aria-label={`Color ${presetColor}`}
@@ -60,12 +69,16 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
             style={{ 
               backgroundColor: color,
               outline: '1px solid #e2e8f0',
-              boxShadow: `0 0 5px ${color}, 0 0 10px ${color}`
+              boxShadow: `0 0 8px ${color}, 0 0 12px ${color}`
             }}
             aria-label="Custom color picker"
           />
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-3 neon-color-popover" align="start">
+        <PopoverContent className="w-auto p-3 neon-container" align="start" style={{ 
+          '--neon-color-from': color,
+          '--neon-color-to': color,
+          '--neon-glow-color': color
+        } as React.CSSProperties}>
           <div className="grid grid-cols-5 gap-2">
             {PRESET_COLORS.map((presetColor) => (
               <button
@@ -74,8 +87,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
                 style={{ 
                   backgroundColor: presetColor,
                   border: '2px solid',
-                  borderColor: color === presetColor ? '#3498db' : 'transparent',
-                  boxShadow: color === presetColor ? `0 0 5px ${presetColor}` : 'none',
+                  borderColor: color === presetColor ? presetColor : 'transparent',
+                  boxShadow: color === presetColor ? `0 0 8px ${presetColor}` : 'none',
                 }}
                 onClick={() => onChange(presetColor)}
                 aria-label={`Color ${presetColor}`}
@@ -88,10 +101,13 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
               type="color"
               value={customColor}
               onChange={(e) => handleColorChange(e.target.value)}
-              className="w-8 h-8 p-0"
+              className="w-8 h-8 p-0 neon-border"
+              style={{
+                boxShadow: `0 0 5px ${customColor}, 0 0 8px ${customColor}`
+              }}
               aria-label="Custom color"
             />
-            <span className="text-xs font-medium">Custom</span>
+            <span className="text-xs font-medium neon-text" style={{ color }}>Custom</span>
           </div>
         </PopoverContent>
       </Popover>
