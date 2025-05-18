@@ -39,7 +39,12 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
               key={presetColor} 
               value={presetColor}
               className="w-6 h-6 p-0 rounded-md"
-              style={{ backgroundColor: presetColor, border: '1px solid #e2e8f0' }}
+              style={{ 
+                backgroundColor: presetColor, 
+                border: '1px solid #e2e8f0',
+                borderColor: color === presetColor ? '#3498db' : '#e2e8f0',
+                outline: color === presetColor ? '2px solid #3498db' : 'none',
+              }}
               onClick={() => onChange(presetColor)}
               aria-label={`Color ${presetColor}`}
             />
@@ -51,7 +56,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
         <PopoverTrigger asChild>
           <button
             className="w-6 h-6 rounded-md border overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-            style={{ backgroundColor: color }}
+            style={{ 
+              backgroundColor: color,
+              outline: '1px solid #e2e8f0',
+            }}
             aria-label="Custom color picker"
           />
         </PopoverTrigger>
@@ -60,9 +68,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => 
             {PRESET_COLORS.map((presetColor) => (
               <button
                 key={presetColor}
-                className="w-6 h-6 rounded-md border-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                className="w-6 h-6 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                 style={{ 
                   backgroundColor: presetColor,
+                  border: '2px solid',
                   borderColor: color === presetColor ? '#3498db' : 'transparent',
                 }}
                 onClick={() => onChange(presetColor)}

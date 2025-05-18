@@ -34,10 +34,12 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
         backgroundColor: '#ffffff',
       });
 
-      // Initialize brush after canvas creation but check if it exists
+      // Initialize brush
       if (canvas.freeDrawingBrush) {
         canvas.freeDrawingBrush.color = activeColor;
         canvas.freeDrawingBrush.width = brushSize;
+      } else {
+        console.error("Free drawing brush not available");
       }
       
       // Save initial state
@@ -74,21 +76,34 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
     }
   }, []);
 
+  // Update drawing mode and brush properties when tool changes
   useEffect(() => {
     if (!fabricCanvas) return;
     
     try {
-      fabricCanvas.isDrawingMode = activeTool === 'draw';
+      console.log("Active tool changed to:", activeTool);
+      console.log("Active color:", activeColor);
       
-      if (activeTool === 'draw' && fabricCanvas.freeDrawingBrush) {
-        fabricCanvas.freeDrawingBrush.color = activeColor;
-        fabricCanvas.freeDrawingBrush.width = brushSize;
-      } else if (activeTool === 'erase' && fabricCanvas.freeDrawingBrush) {
-        // Set up eraser behavior
+      if (activeTool === 'draw') {
         fabricCanvas.isDrawingMode = true;
-        fabricCanvas.freeDrawingBrush.color = '#ffffff';
-        fabricCanvas.freeDrawingBrush.width = brushSize * 2;
+        if (fabricCanvas.freeDrawingBrush) {
+          fabricCanvas.freeDrawingBrush.color = activeColor;
+          fabricCanvas.freeDrawingBrush.width = brushSize;
+          console.log("Drawing mode enabled with color:", activeColor, "and size:", brushSize);
+        }
+      } else if (activeTool === 'erase') {
+        fabricCanvas.isDrawingMode = true;
+        if (fabricCanvas.freeDrawingBrush) {
+          fabricCanvas.freeDrawingBrush.color = '#ffffff';
+          fabricCanvas.freeDrawingBrush.width = brushSize * 2;
+          console.log("Eraser mode enabled");
+        }
+      } else {
+        fabricCanvas.isDrawingMode = false;
+        console.log("Selection mode enabled");
       }
+      
+      fabricCanvas.renderAll();
     } catch (error) {
       console.error("Error updating canvas tool:", error);
     }
@@ -149,15 +164,18 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
 
   const handleColorChange = (color: string) => {
     setActiveColor(color);
+    console.log("Color changed to:", color);
     if (fabricCanvas && fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.color = color;
+      console.log("Brush color updated to:", color);
     }
   };
 
   const handleBrushSizeChange = (size: number) => {
     setBrushSize(size);
-    if (fabricCanvas && fabricCanvas.isDrawingMode && fabricCanvas.freeDrawingBrush) {
+    if (fabricCanvas && fabricCanvas.freeDrawingBrush) {
       fabricCanvas.freeDrawingBrush.width = size;
+      console.log("Brush size updated to:", size);
     }
   };
 
@@ -212,7 +230,6 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
     
     try {
       fabricCanvas.clear();
-      // Fix the TypeScript error by setting backgroundColor property directly instead of using setBackgroundColor
       fabricCanvas.backgroundColor = '#ffffff';
       fabricCanvas.renderAll();
       saveCanvasState();
@@ -227,11 +244,10 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
     if (!fabricCanvas) return;
     
     try {
-      // Fix the TypeScript error by adding the required 'multiplier' property
       const dataURL = fabricCanvas.toDataURL({
         format: 'png',
         quality: 1,
-        multiplier: 1, // Add the required multiplier property
+        multiplier: 1,
       });
       
       const link = document.createElement('a');
@@ -265,9 +281,8 @@ export const Canvas: React.FC<CanvasProps> = ({ sessionId = 'default-session' })
         />
         <ColorPicker color={activeColor} onChange={handleColorChange} />
       </div>
-      <div className={`canvas-container border-2 rounded-lg shadow-lg overflow-hidden
-        ${activeTool === 'draw' || activeTool === 'erase' ? 'drawing-active' : ''}`}>
-        <canvas ref={canvasRef} />
+      <div className={`canvas-container border-2 rounded-lg shadow-lg overflow-hidden cursor-${activeTool === 'draw' ? 'crosshair' : activeTool === 'erase' ? 'cell' : 'default'}`}>
+        <canvas ref={canvasRef} className="touch-none" />
       </div>
     </div>
   );
