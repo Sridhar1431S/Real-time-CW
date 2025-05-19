@@ -224,3 +224,64 @@
   --neon-color-to: #27ae60;
   --neon-glow-color: #2ecc71;
 }
+
+/* Enhanced responsive neon button styling */
+.neon-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.neon-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.neon-btn:hover:before {
+  left: 100%;
+}
+
+/* Improved responsive styles for all devices */
+@media (max-width: 640px) {
+  .neon-container::before,
+  .neon-container::after {
+    /* Reduce glow intensity on small screens */
+    opacity: 0.5;
+  }
+  
+  .neon-text {
+    /* Reduce text shadow intensity on small screens */
+    text-shadow: 0 0 3px currentColor, 0 0 5px currentColor;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .neon-container {
+    /* Better padding for medium screens */
+    padding: 1.5rem !important;
+  }
+}
+
+/* Desktop enhancements */
+@media (min-width: 1025px) {
+  .neon-container:hover::after {
+    /* Enhanced hover effect on large screens */
+    opacity: 0.9;
+    box-shadow: 0 0 20px 4px var(--neon-glow-color, #3498db);
+  }
+}

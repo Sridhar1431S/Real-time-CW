@@ -13,11 +13,18 @@ const Index = () => {
       <Navbar />
       
       <main className="flex-1">
-        {/* Hero Section */}
+        {/* Hero Section with Neon Container */}
         <section className="bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+          <div 
+            className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-32 neon-container"
+            style={{
+              '--neon-color-from': '#3498db',
+              '--neon-color-to': '#2980b9',
+              '--neon-glow-color': '#3498db'
+            } as React.CSSProperties}
+          >
             <div className="text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 animate-fadeIn">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 animate-fadeIn neon-text">
                 Smart Image Classification & Collaborative Whiteboards
               </h1>
               <p className="text-xl md:text-2xl max-w-3xl mx-auto mb-8 text-primary-50 animate-slideUp">
@@ -25,12 +32,12 @@ const Index = () => {
               </p>
               <div className="flex flex-wrap justify-center gap-4 animate-slideUp">
                 <Link to="/classify">
-                  <Button size="lg">
+                  <Button size="lg" className="neon-btn">
                     Classify Images
                   </Button>
                 </Link>
                 <Link to={isAuthenticated ? "/whiteboard" : "/login"}>
-                  <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white">
+                  <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white neon-btn">
                     Try Whiteboard
                   </Button>
                 </Link>
@@ -39,19 +46,26 @@ const Index = () => {
           </div>
         </section>
         
-        {/* Features Section */}
+        {/* Features Section with Neon Cards */}
         <section className="py-16 md:py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12 md:mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Powerful Features</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Our platform combines state-of-the-art image classification with intuitive collaboration tools
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature 1 */}
-              <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {/* Feature 1 - with neon effect */}
+              <div 
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow neon-container"
+                style={{
+                  '--neon-color-from': '#3498db',
+                  '--neon-color-to': '#3498db',
+                  '--neon-glow-color': '#3498db'
+                } as React.CSSProperties}
+              >
                 <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -63,8 +77,15 @@ const Index = () => {
                 </p>
               </div>
               
-              {/* Feature 2 */}
-              <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              {/* Feature 2 - with neon effect */}
+              <div 
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow neon-container"
+                style={{
+                  '--neon-color-from': '#2ecc71',
+                  '--neon-color-to': '#27ae60',
+                  '--neon-glow-color': '#2ecc71'
+                } as React.CSSProperties}
+              >
                 <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -76,8 +97,15 @@ const Index = () => {
                 </p>
               </div>
               
-              {/* Feature 3 */}
-              <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+              {/* Feature 3 - with neon effect */}
+              <div 
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow neon-container"
+                style={{
+                  '--neon-color-from': '#9b59b6',
+                  '--neon-color-to': '#8e44ad',
+                  '--neon-glow-color': '#9b59b6'
+                } as React.CSSProperties}
+              >
                 <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -92,21 +120,28 @@ const Index = () => {
           </div>
         </section>
         
-        {/* CTA Section */}
+        {/* CTA Section with Neon Container */}
         <section className="py-16 md:py-24 bg-gradient-to-r from-secondary-500 to-primary-500 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div 
+            className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center neon-container"
+            style={{
+              '--neon-color-from': '#2ecc71',
+              '--neon-color-to': '#3498db',
+              '--neon-glow-color': '#2ecc71'
+            } as React.CSSProperties}
+          >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to get started?</h2>
             <p className="text-lg max-w-2xl mx-auto mb-8">
               Join thousands of professionals and teams using our platform for image analysis and collaboration.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to={isAuthenticated ? "/whiteboard" : "/signup"}>
-                <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100 neon-btn">
                   {isAuthenticated ? "Open Whiteboard" : "Sign Up for Free"}
                 </Button>
               </Link>
               <Link to="/classify">
-                <Button size="lg" variant="outline" className="border-white hover:bg-white/10">
+                <Button size="lg" variant="outline" className="border-white hover:bg-white/10 neon-btn">
                   Try Image Classification
                 </Button>
               </Link>
