@@ -2,6 +2,18 @@
 
 A real-time collaborative web application designed to enable users to communicate and work together seamlessly. This project demonstrates real-time data transmission and interaction using modern web technologies.
 
+
+
+
+![Screenshot 2025-05-19 213306](https://github.com/user-attachments/assets/fc9e956e-0f92-42a1-9e1e-2d8ded05a294)
+
+
+
+
+
+
+
+
 ## 🚀 Features
 
 - 🔄 Real-time communication and updates
@@ -22,9 +34,6 @@ A real-time collaborative web application designed to enable users to communicat
 1. Clone the repository:
    git clone https://github.com/Sridhar1431S/Real-time-CW.git
    cd Real-time-CW
-
-
-   ![Screenshot 2025-05-19 213306](https://github.com/user-attachments/assets/652930a5-5c43-4858-b96e-91f222b890b5)
 
 
 ✅ To Do / Upcoming Features
