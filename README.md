@@ -23,6 +23,10 @@ A real-time collaborative web application designed to enable users to communicat
    git clone https://github.com/Sridhar1431S/Real-time-CW.git
    cd Real-time-CW
 
+
+   ![Screenshot 2025-05-19 213306](https://github.com/user-attachments/assets/652930a5-5c43-4858-b96e-91f222b890b5)
+
+
 ✅ To Do / Upcoming Features
  Basic real-time communication
 
